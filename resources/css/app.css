@@ -22,3 +22,6 @@
 .ts-dropdown .active {
     background: white;
 }
+.ck-editor__editable {
+    min-height: 350px;
+}

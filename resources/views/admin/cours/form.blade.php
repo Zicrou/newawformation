@@ -75,7 +75,7 @@
             dark:border-gray-600 dark:bg-gray-700 dark:text-white
             dark:focus:border-indigo-500
            @error('description') border-red-500 focus:border-red-500 focus:ring-red-500 @enderror">
-            {{ old('description', $cour->description) }}
+            {!! old('description', $cour->description) !!}
         </textarea>
 
         @error('price')
@@ -181,7 +181,7 @@
 </div>
 
 {{-- Bouton --}}
-<div class="mt-8 flex justify-end">
+<div class="mt-8 flex justify-center mt-1">
 
     <button
         type="submit"
@@ -196,9 +196,87 @@
     </button>
 
 </div>
+<div class="mx-auto max-w-6xl rounded-xl bg-white p-8 shadow mt-14 mb-5">
+
+    <h2 class="mb-8 text-center text-2xl font-bold">
+        Photo et vidéo actuelles
+    </h2>
+
+    <div class="flex flex-row items-start justify-center gap-8">
+
+        {{-- Video --}}
+        <div class="w-1/2">
+            @if($cour->video)
+                <video
+                    controls
+                    class="h-72 w-full rounded-lg border object-cover">
+                    <source src="{{ asset($cour->video) }}">
+                </video>
+            @else
+                <p>Pas de vidéo</p>
+            @endif
+        </div>
+
+        {{-- Image --}}
+        <div class="w-1/2">
+            @if($cour->thumbnail)
+                <img
+                    src="{{ asset($cour->thumbnail) }}"
+                    alt=""
+                    class="h-72 w-full rounded-lg border object-cover">
+            @else
+                <p>Pas d'image</p>
+            @endif
+        </div>
+
+    </div>
+
+</div>
 <script>
+function MyUploadAdapter(loader) {
+    this.loader = loader;
+}
+
+MyUploadAdapter.prototype.upload = function () {
+    return this.loader.file.then(file => {
+        return new Promise((resolve, reject) => {
+
+            const data = new FormData();
+
+            data.append('upload', file);
+
+            fetch("{{ route('ckeditor.upload') }}", {
+                method: "POST",
+                body: data,
+                headers: {
+                    "X-CSRF-TOKEN":
+                        document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+
+                resolve({
+                    default: result.url
+                });
+
+            })
+            .catch(error => reject(error));
+
+        });
+    });
+};
+
+function MyCustomUploadAdapterPlugin(editor) {
+    editor.plugins.get('FileRepository').createUploadAdapter = loader => {
+        return new MyUploadAdapter(loader);
+    };
+}
+
 ClassicEditor
-    .create(document.querySelector('#description'))
+    .create(document.querySelector('#description'), {
+        extraPlugins: [MyCustomUploadAdapterPlugin]
+    })
     .catch(error => {
         console.error(error);
     });

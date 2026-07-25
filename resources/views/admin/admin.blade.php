@@ -14,28 +14,29 @@
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 </head>
 
 <body class="min-h-screen bg-gray-100">
-
+    
     @php
         $route = request()->route()->getName();
     @endphp
 
-    @include('shared.nav')
+@include('shared.nav')
 
-    <!-- Main -->
-    <main class="mx-auto mt-8 max-w-7xl px-6">
+<!-- Main -->
+<main class="mx-auto mt-8 max-w-7xl px-6">
+    
+    @include('shared.flash')
+    
+    @yield('content')
+    
+</main>
 
-        @include('shared.flash')
-
-        @yield('content')
-
-    </main>
-
-    @include('layouts.footer')
+@include('layouts.footer')
 
 </body>
 

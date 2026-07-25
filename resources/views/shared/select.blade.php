@@ -1,21 +1,53 @@
-@php
-    $class ??= null;
-    $name ??= '';
-    $value ??= '';
-    $label ??= ucfirst($name);
-@endphp
+@props([
+    'label' => null,
+    'name',
+    'options' => [],
+    'value' => null,
+    'multiple' => false,
+])
 
-<div @class(["form-group", $class])>
-    <label for="{{ $name }}">{{ $label }}</label>
-    <select name="{{ $name }}[]" id="{{ $name }}" multiple>
-        @foreach ($tags as $k => $v)
-            <option @selected($value->contains($k)) value="{{ $k }}">{{ $v }}</option>
+<div>
+
+    @if($label)
+        <label
+            for="{{ $name }}"
+            class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+            {{ $label }}
+        </label>
+    @endif
+
+    <select
+        id="{{ $name }}"
+        name="{{ $multiple ? $name.'[]' : $name }}"
+        @if($multiple) multiple @endif
+
+        class="block w-full rounded-lg border border-gray-300 bg-white
+               px-4 py-2 shadow-sm
+               focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500
+               dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+
+        @foreach($options as $id => $text)
+
+            <option
+                value="{{ $id }}"
+                @selected(
+                    $multiple
+                        ? collect(old($name, $value))->contains($id)
+                        : old($name, $value) == $id
+                )>
+
+                {{ $text }}
+
+            </option>
+
         @endforeach
+
     </select>
 
     @error($name)
-        <div class="invalid-feedback">
+        <p class="mt-2 text-sm text-red-600">
             {{ $message }}
-        </div>
+        </p>
     @enderror
+
 </div>

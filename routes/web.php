@@ -8,43 +8,43 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CKEditorController;
+use App\Http\Controllers\StripeController;
 
 $idRegex = '[0-9a-z\-]+';
 $slugRegex = '[0-9a-z\-]+';
+// Cours
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/cours', [App\Http\Controllers\CourController::class, 'index'])->name('cour.index');
-Route::get('/cours/{slug}-{cour}', [App\Http\Controllers\CourController::class, 'show'])->name('cour.show')->where([
+Route::get('/cours/{slug}/{cour}', [App\Http\Controllers\CourController::class, 'show'])->name('cour.show')->where([
     'cour' => $idRegex,
     'slug' => $slugRegex,
 ]);
-
 Route::post('/cours/{cour}/contact', [\App\Http\Controllers\CourController::class, 'contact'])->name('cour.contact')->where([
     'cour' => $idRegex,
 ]);
+// Likes
 Route::middleware('auth')->group(function () {
     Route::post('/cours/likes/{courId}', [CourController::class, 'likeCour'])
         ->name('likes.cours');
 });
+// Panier
 Route::get('panier', [CartController::class, 'index'])->name('cart.index');
 Route::get('panier/store', [CartController::class, 'store'])->name('cart.store');
 Route::post('panier/{cartId}', [CartController::class, 'destroy'])->name('cart.delete');
 Route::post('/cours/likes/{courId}', [CourController::class, 'likeCour'])->name('like.cour')->where([
     'courId' => $idRegex,
 ]);
-Route::get('services', function () {
-    return view('services');
-})->name('services');
-
+    //Admins
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function(){
     Route::resource('cours', \App\Http\Controllers\Admin\CourController::class)->except(['show']);
     Route::resource('tag', TagController::class)->except(['show']);
 });
-
+    //Services
 Route::get('services', function () {
     return view('services');
 })->name('services');
 
-
+    //Breezes, dashboards routes 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -53,7 +53,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+    //ckEditors
 Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])
     ->name('ckeditor.upload');
+    
+    //Stripes
+Route::get('/stripe', [StripeController::class, 'stripe'])->name('stripe.index');
+Route::get('stripe/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout');
+Route::get('stripe/checkout/success', [StripeController::class, 'success'])->name('stripe.checkout.success');
+
 require __DIR__.'/auth.php';

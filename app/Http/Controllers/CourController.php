@@ -24,7 +24,9 @@ class CourController extends Controller
         // $like = $cour->likes()->where('user_id', $user->id)->exists();
         // // dd($like);
 
-        $query = Cours::query()->where('disponible', '=', 1)->withCount('likes');
+        $query = Cours::query()->where('disponible', '=', 1)->with('tags')
+    ->withCount('likes');
+   
         
         if ($price = $request->validated('price')) {
             $query = $query->where('price', '<=', $price);
@@ -38,7 +40,7 @@ class CourController extends Controller
         
         //$result = $query->created_at->diffForHumans()->get();
         return view('cour.index', [
-            'cours' => $query->paginate(16),
+            'cours' => $query->paginate(12),
             'input' => $request->validated()
         ]);
     }
@@ -48,7 +50,6 @@ class CourController extends Controller
         $cart = Cart::where('cours_id', '=', $cour->id)
         ->where('user_id', '=', Auth::user()->id)
         ->where('paid', '=', 1)->get();
-        dd($cart);
         
         $expectedSlug = $cour->getSlug();
         if ($slug !== $expectedSlug) {

@@ -1,45 +1,99 @@
 @extends('base')
 
 @section('title', 'Tous nos cours')
+
 @section('content')
-  @include('shared.nav')
 
 @include('shared.flash')
-<section class="mt-4 mb-5">
-    <form action="" method="get" class="gap-2">
-        <div class="container">
-            <div class="row d-flex align-items-center justify-content-center">
-                <div class="col-12 col-lg-6 mb-3">
-                    <input type="number" placeholder="Budget max" class="form-control" name="price" value="{{ $input['price'] ?? ''}}">
-                </div>
-                <div class="col-12 col-lg-6">
-                    <input type="text" placeholder="Mot clef" class="form-control" name="title" value="{{ $input['title'] ?? ''}}">
-                </div>
-            </div>
-            <div class="mt-3 d-flex justify-content-center align-items-center">
-                <button class="btn btn-primary px-5 py-3 d-inline-block">
-                    Rechercher
-                </button>
-            </div>
+
+<x-course-search-hero />
+
+<section class="mx-auto max-w-7xl px-6 py-16">
+
+    <div class="mb-8 flex items-center justify-between">
+
+        <div>
+
+            <h2 class="text-3xl font-bold text-gray-900">
+
+                Nos formations
+
+            </h2>
+
+            <p class="mt-2 text-gray-500">
+
+                {{ $cours->total() }} formations trouvées
+
+            </p>
+
         </div>
-    </form>
-</section>
-<section class="mt-5 mb-5">
-    <div class="container">
-        <h2>Nos derniers cours :</h2>
-        <div class="row">
-            @forelse ($cours as $cour)
-                @include('cour.card')
-                @empty
-                    <div class="col">
-                        Aucun cours ne correspond à votre recherche
-                    </div>
-            @endforelse
-        </div>
+
     </div>
+
+    {{-- Les cartes arriveront ici --}}
+    <section class="mx-auto max-w-7xl px-6 py-20">
+
+    <div class="mb-10 flex items-center justify-between">
+
+        <div>
+
+            <h2 class="text-4xl font-bold">
+
+                Nos formations
+
+            </h2>
+
+            <p class="mt-2 text-gray-500">
+
+                {{ $cours->total() }} formations disponibles
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+        @forelse($cours as $cour)
+
+            <x-course-card :cour="$cour" />
+
+        @empty
+
+            <div class="col-span-full rounded-3xl border border-dashed border-gray-300 bg-gray-50 p-20 text-center">
+
+                <div class="text-6xl">
+
+                    🔍
+
+                </div>
+
+                <h3 class="mt-6 text-3xl font-bold">
+
+                    Aucun résultat
+
+                </h3>
+
+                <p class="mt-3 text-gray-500">
+
+                    Essayez un autre mot-clé ou augmentez votre budget.
+
+                </p>
+
+            </div>
+
+        @endforelse
+
+    </div>
+
+    <div class="mt-16 flex justify-center">
+
+        {{ $cours->links() }}
+
+    </div>
+
+</section>
 </section>
 
-<div class="my-4">
-    {{ $cours->links() }}
-</div>
 @endsection

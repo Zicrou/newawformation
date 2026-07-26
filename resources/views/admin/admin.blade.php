@@ -36,8 +36,7 @@
     
 </main>
 
-@include('layouts.footer')
-
+<x-footer />
 </body>
 
 </html>

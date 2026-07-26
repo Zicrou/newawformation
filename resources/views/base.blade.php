@@ -16,8 +16,15 @@
 </head>
 
 <body>
- @yield('content')
+    @php
+        $route = request()->route()->getName();
+    @endphp
 
- @include('layouts.footer');
+    @include('shared.nav')
+
+    @yield('content')
+
+<x-footer />
+ 
 </body>
 </html>

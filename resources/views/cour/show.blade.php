@@ -3,133 +3,195 @@
 @section('title', Str::limit($cour->title, 20))
 
 @section('content')
-<section class="container">
-    
+
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+
+    {{-- Errors --}}
     @if ($errors->any())
-        <div class="alert alert-danger mt-5">
-            <ul>
+        <div class="mb-8 rounded-lg border border-red-300 bg-red-50 p-4">
+            <h3 class="mb-2 font-semibold text-red-700">
+                Des erreurs sont survenues :
+            </h3>
+
+            <ul class="list-inside list-disc text-red-600">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
     @endif
-    
-    <div class="row mt-5">
-        <div class="col-md-8">
-            <video controls src="{{ asset($cour->video) }}" class="w-100"></video>
-            <h1 class="text-primary text-center">{{ $cour->title }}</h1>
-            <div class="mt-4">
-                <p>{!! nl2br($cour->description) !!}</p>
+
+    {{-- Main Content --}}
+    <div class="grid gap-8 lg:grid-cols-3">
+
+        {{-- Course --}}
+        <div class="lg:col-span-2">
+
+            <div class="overflow-hidden rounded-2xl bg-white shadow">
+
+                <video
+                    controls
+                    class="aspect-video w-full">
+                    <source src="{{ asset($cour->video) }}">
+                </video>
+
+                <div class="p-8">
+
+                    <h1 class="mb-6 text-4xl font-bold text-indigo-600">
+                        {{ $cour->title }}
+                    </h1>
+
+                    <div class="prose max-w-none">
+                        {!! $cour->description !!}
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
 
-        <div class="col-md-4 mt-5">
-            <div class="d-flex justify-content-center align-items-center text-center text-primary fw-bold " style="">
-                @if ($produit)
-                    <span class="px-3">{{ number_format($cour->price, thousands_separator: ' ') }}£</span>
-                    <a href="{{ route('stripe.checkout', ['cour' => $cour]) }}" class=" btn btn-outline-primary">Commander</a>
-                @endif
-                {{-- <div class="form-group mt-5">
-                    <form action="{{ route('stripe.checkout', $cour) }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="cour" value="{{$cour}}">
-                        <button class="btn btn-primary col-md-3" type="submit">Acheter</button>
-                    </form> 
-                </div> --}}
+        {{-- Sidebar --}}
+        <aside>
+
+            {{-- Purchase Card --}}
+            <div class="sticky top-6 rounded-2xl bg-white p-6 shadow">
+
+                <div class="mb-6 text-center">
+
+                    <p class="text-4xl font-bold text-indigo-600">
+                        {{ number_format($cour->price, thousands_separator: ' ') }} £
+                    </p>
+
+                </div>
+
+                <a
+                    href="{{ route('stripe.checkout', ['cour' => $cour]) }}"
+                    class="block w-full rounded-lg bg-indigo-600 py-3 text-center font-semibold text-white transition hover:bg-indigo-700">
+
+                    Commander
+
+                </a>
+
+                <hr class="my-6">
+
+                <div class="space-y-3 text-sm text-gray-600">
+
+                    <div class="flex justify-between">
+                        <span>Disponibilité</span>
+                        <span class="font-semibold text-green-600">
+                            Disponible
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span>Ajouté</span>
+                        <span>{{ $cour->created_at->diffForHumans() }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span>Mis à jour</span>
+                        <span>{{ $cour->updated_at->diffForHumans() }}</span>
+                    </div>
+
+                </div>
+
             </div>
-            <div class="">
-                {{-- <h4>{{ __('Interested in this classe :title ?', ['title' => $cour->title]) }}</h4> --}}
-                {{-- <form action="{{ route('cour.contact', $cour)}}" method="post" class="vstack gap-3">
-                    @csrf
 
-                    <div class="row">
-                        @include('shared.input', [
-                            'class' => 'col',
-                            'name' => 'firstname',
-                            'label' => 'Prénom',
-                            'value' => 'John',
-                        ])
-                        @include('shared.input', [
-                            'class' => 'col',
-                            'name' => 'lastname',
-                            'label' => 'Nom',
-                            'value' => 'Doe',
-                        ])
-                    </div>
+        </aside>
 
-                    <div class="row">
-                        @include('shared.input', [
-                            'class' => 'col',
-                            'name' => 'phone',
-                            'label' => 'Téléphone',
-                            'value' => '0000000000',
-                        ])
-                        @include('shared.input', [
-                            'type' => 'email',
-                            'class' => 'col',
-                            'name' => 'email',
-                            'label' => 'Email',
-                            'value' => 'john@doe.fr',
-                        ])
-                    </div>
-
-                    @include('shared.input', [
-                        'type' => 'textarea',
-                        'class' => 'col',
-                        'name' => 'message',
-                        'label' => 'Votre message',
-                        'value' => 'Description',
-                    ])
-                    <div>
-                        <button class="btn btn-primary">
-                            Nous contacter
-                        </button>
-                    </div>
-                </form> --}}
-            </div>
-            
-        </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <h2>Les plus vendus</h2>
-            <table class="table table-striped">
-                <tr>
-                    <td>Price</td>
-                    <td>{{ $cour->price }}</td>
-                </tr>
-                <tr>
-                    <td>Nombre de fois vendu</td>
-                    <td>{{ $cour->price }}</td>
-                </tr>
-                <tr>
-                    <td>Price</td>
-                    <td>{{ $cour->price }}</td>
-                </tr>
-                <tr>
-                    <td>Price</td>
-                    <td>{{ $cour->price }}</td>
-                </tr>
-                <tr>
-                    <td>Price</td>
-                    <td>
-                        {{ $cour->price }}<br />
-                        {{ $cour->city }} {{ $cour->price }}
-                    </td>
-                </tr>
-            </table>
+    {{-- Bottom Section --}}
+    <div class="mt-12 grid gap-8 lg:grid-cols-3">
+
+        {{-- Statistics --}}
+        <div class="lg:col-span-2">
+
+            <div class="rounded-2xl bg-white p-6 shadow">
+
+                <h2 class="mb-6 text-2xl font-bold">
+                    Informations du cours
+                </h2>
+
+                <table class="min-w-full">
+
+                    <tbody class="divide-y divide-gray-200">
+
+                        <tr>
+                            <td class="py-3 font-medium text-gray-600">
+                                Prix
+                            </td>
+
+                            <td class="py-3 text-right">
+                                {{ number_format($cour->price, thousands_separator: ' ') }} £
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="py-3 font-medium text-gray-600">
+                                Dernière mise à jour
+                            </td>
+
+                            <td class="py-3 text-right">
+                                {{ $cour->updated_at->format('d/m/Y') }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="py-3 font-medium text-gray-600">
+                                Disponibilité
+                            </td>
+
+                            <td class="py-3 text-right">
+                                {{ $cour->disponible ? 'Oui' : 'Non' }}
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
-        <div class="col-md-4">
-            <h2>Tags</h2>
-            <ul class="list-group">
-                @foreach ($cour->tags as $tag)
-                    <li class="list-group-item">{{ $tag->name }}</li>
-                @endforeach
-            </ul>
+
+        {{-- Tags --}}
+        <div>
+
+            <div class="rounded-2xl bg-white p-6 shadow">
+
+                <h2 class="mb-5 text-2xl font-bold">
+                    Tags
+                </h2>
+
+                <div class="flex flex-wrap gap-2">
+
+                    @forelse($cour->tags as $tag)
+
+                        <span
+                            class="rounded-full bg-indigo-100 px-4 py-2 text-sm font-medium text-indigo-700">
+
+                            {{ $tag->name }}
+
+                        </span>
+
+                    @empty
+
+                        <p class="text-gray-500">
+                            Aucun tag.
+                        </p>
+
+                    @endforelse
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
-</section>
+
+</div>
 
 @endsection

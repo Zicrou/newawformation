@@ -60,5 +60,16 @@ class Cours extends Model
             return $this->likes()->where('user_id', Auth::user()->id)->exists();
         }
     }
+
+    public function likedByUser(): bool
+{
+    if (! auth()->check()) {
+        return false;
+    }
+
+    return $this->likes()
+        ->where('user_id', auth()->id())
+        ->exists();
+}
     
 }

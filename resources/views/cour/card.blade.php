@@ -3,7 +3,7 @@
         <img src="{{ asset($cour->thumbnail) }}" class="w-100 img-fluid" alt="...">
         <div class="card-body">
             <h5 class="card-title text-center">{{ Str::limit($cour->title, 40) }}</h5>
-            <p class="card-text text-center">{{ Str::words($cour->description, 15) }}</p>
+            <p class="card-text text-center"><a href="{{ route('cour.show', ['cour' => $cour->id, 'slug' => $cour->getSlug()]) }}">Voir le cours</a></p>
             <div class="row  pt-3">
                 <div class="col-6 col-lg-6 liking">
                     <i class="fa-heart {{ $cour->isLikedByUser() ? 'fas' : 'far' }}"></i>
@@ -20,7 +20,6 @@
                     <p class="card-text">
                         <small class="text-muted">
                             {{ number_format($cour->price, thousands_separator: ' ') }} £ 
-                            
                         </small>
                     </p>
                 </div>

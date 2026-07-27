@@ -97,7 +97,7 @@
             <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
         </svg>
 
-        <span class="likes-count">
+        <span class="likes-count" id="likes-count">
 
             {{ $cour->likes()->count() }}
 
@@ -123,22 +123,21 @@
                 Voir le cours
 
             </a>
-
-            <form action="{{ route('cart.store') }}" method="POST">
-
+            <form action="{{ route('cart.store', ['courId' => $cour->id]) }}" method="POST">
                 @csrf
 
-                <input type="hidden" name="cours_id" value="{{ $cour->id }}">
+                <input type="hidden" name="courId" value="{{ $cour->id }}">
 
                 <button
-                    class="rounded-xl border border-indigo-600 px-4 py-3 font-semibold text-indigo-600 transition hover:bg-indigo-600 hover:text-white">
-
-                    🛒
-
+                    type="submit"
+                    class="add-to-cart rounded-xl px-5 py-3 font-semibold text-white transition
+                        {{ session('status') === 'added'
+                            ? 'bg-green-600'
+                            : 'bg-white-600 hover:bg-indigo-700' }}"
+                    data-status="{{ session('status') }}">
+                    {{ session('status') === 'added' ? '✓' : '🛒' }}
                 </button>
-
             </form>
-
         </div>
 
     </div>
@@ -152,26 +151,29 @@ document.querySelectorAll('.like-btn').forEach(button => {
 
         const response = await fetch(this.dataset.url, {
             method: 'POST'})
-            // .then(response => response.json())
-            // .then(data => {
-                // if(data.message == "Please log in first."){
-                //     alert(data.message)
-                // }
-            const data = await response.json();
-            console.log(data);
+        const data = await response.json();
+            if(data.message == "Please log in first."){
+                alert("Veuillez vous connecté svp")
+            }
 
         const heart = this.querySelector('.heart');
-            console.log("We're here");
+        
+        console.log("We're here");
+        const likes = document.getElementById('likes-count');
+
         if (data.status === 'liked') {
 
             heart.classList.remove('text-gray-500');
             heart.classList.add('text-red-500');
+
+            likes.textContent = data.likesCount;
 
         } else {
 
             heart.classList.remove('text-red-500');
             heart.classList.add('text-gray-500');
 
+            likes.textContent = data.likesCount;
         }
             // });
             

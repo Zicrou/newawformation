@@ -7,6 +7,8 @@ use App\Models\Cart;
 use App\Models\Cours;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use App\Models\CartItems;
 
 class CartController extends Controller
 {
@@ -15,9 +17,12 @@ class CartController extends Controller
      */
     public function index()
     {
-        $carts = Cart::where("user_id", Auth::user()->id)->where('paid', 0)->with('cours')->orderBy("id","desc")->paginate(10);
-        // dd($carts->first()->cours->title);
-        return view("panier.index", ["carts" => $carts]);
+        
+        $cart = auth()->user()
+            ->cart()
+            ->with('items.cours')
+            ->first();
+        return view("panier.index", ["cart" => $cart]);
     }
 
     /**
@@ -33,17 +38,22 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $cours =  Cours::where("id", $request->cour)->first();
-        $cart = Cart::where("cours_id", $cours->id)->where("user_id", Auth::user()->id)->first();
-        
-        if(!$cart){
-            Cart::create([
-                'cours_id' => $cours->id,
-                'user_id' => Auth::user()->id,
-                'paid' => false,
-            ]);
+        $data = $request->validate([
+            'courId' => ['required', 'exists:cours,id'],
+        ]);
+        $cart = Cart::firstOrCreate([
+            'user_id' => auth()->id()
+        ]);
+
+        $cart->items()->firstOrCreate([
+            'cours_id' => $data['courId'],
+        ]);
+
+        if ($cart->wasRecentlyCreated) {
+            return back()->with('success', 'Cours ajouté au panier.');
         }
-        return redirect()->route('cour.index')->with('success','Le cours a été mis dans le panier');
+
+        return back()->with('info', 'Ce cours est déjà dans votre panier.')->with('status', 'added');
     }
 
     /**
@@ -86,5 +96,22 @@ class CartController extends Controller
         // }
         //$cart->delete();
         return to_route('cart.index')->with('success', 'Le produit a été supprimé');
+    }
+
+    public function removeItem(CartItems $item)
+    {
+        dd($item);
+        abort_unless($item->cart->user_id === auth()->id(), 403);
+
+        $item->delete();
+
+        $cartCount = CartItems::whereHas('cart', function ($query) {
+            $query->where('user_id', auth()->id());
+        })->count();
+
+        return response()->json([
+            'success' => true,
+            'cartCount' => $cartCount,
+        ]);
     }
 }

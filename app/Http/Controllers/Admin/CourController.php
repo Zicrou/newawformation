@@ -17,19 +17,9 @@ class CourController extends Controller
      */
     public function index()
     {
-        // Cours::create([
-        //     'title' => 'Title',
-        //     'description' => 'Description',
-        //     'thumbnail' => 'cour_thumbnail.png',
-        //     'video' => 'cour_video.mp4',
-        //     'price' => '1890000',
-        //     'disponible' => '1',
-        //     'sold' => '1',
-        // ]);
-        
-        //check this just for a try dd(Cours::first()->tags()->pluck('id', 'name'));
+       
         return view('admin.cours.index', [
-            'cours' => Cours::orderBy('created_at', 'desc')->paginate(25)
+            'cours' => Cours::orderBy('created_at', 'desc')->paginate(25),
         ]);
     }
 

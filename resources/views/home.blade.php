@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('base')
 
 @section('title', 'Accueil')
 
@@ -6,7 +6,7 @@
 
 <x-hero />
 
-<x-search />
+<x-search/>
 
 <x-stats />
 
@@ -20,6 +20,5 @@
 
 <x-cta />
 
-<x-footer />
 
 @endsection

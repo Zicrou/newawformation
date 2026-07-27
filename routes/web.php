@@ -23,17 +23,24 @@ Route::post('/cours/{cour}/contact', [\App\Http\Controllers\CourController::clas
     'cour' => $idRegex,
 ]);
 // Likes
-Route::middleware('auth')->group(function () {
-    Route::post('/cours/likes/{courId}', [CourController::class, 'likeCour'])
-        ->name('likes.cours');
-});
-// Panier
-Route::get('panier', [CartController::class, 'index'])->name('cart.index');
-Route::get('panier/store', [CartController::class, 'store'])->name('cart.store');
-Route::post('panier/{cartId}', [CartController::class, 'destroy'])->name('cart.delete');
+// Route::middleware('auth')->group(function () {
+//     Route::post('/cours/likes/{courId}', [CourController::class, 'likeCour'])
+//         ->name('likes.cours');
+// });
 Route::post('/cours/likes/{courId}', [CourController::class, 'likeCour'])->name('like.cour')->where([
     'courId' => $idRegex,
 ]);
+// Panier
+Route::get('panier', [CartController::class, 'index'])->name('cart.index');
+Route::post('panier/{cartId}', [CartController::class, 'destroy'])->name('cart.delete');
+Route::delete('/panier/item/{item}', [CartController::class, 'removeItem'])
+    ->name('cart.item.destroy');
+Route::post('/panier/store/{courId}', [CartController::class, 'store'])
+    ->middleware('auth')
+    ->name('cart.store')
+    ->where([
+        'courId'=> $idRegex,
+    ]);
     //Admins
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function(){
     Route::resource('cours', \App\Http\Controllers\Admin\CourController::class)->except(['show']);

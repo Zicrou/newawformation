@@ -18,7 +18,8 @@ class TagController extends Controller
     public function index()
     {
         return view('admin.tags.index', [
-            'tags' => Tag::paginate(25)
+            'tags' => Tag::paginate(25),
+
         ]);
     }
 
@@ -27,9 +28,10 @@ class TagController extends Controller
      */
     public function create()
     {
+        
         $tag = new Tag();
         return view('admin.tags.form', [
-            'tag' => $tag
+            'tag' => $tag,
         ]);
     }
 

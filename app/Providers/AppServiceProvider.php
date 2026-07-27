@@ -4,7 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
-
+use Illuminate\Support\Facades\View;
+use App\Models\Cart;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -20,6 +21,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Paginator::useBootstrapFive();
+        View::composer('shared.nav', function ($view) {
+
+            $cartCount = 0;
+
+            if (auth()->check()) {
+
+                $cart = auth()->user()->cart()->withCount('items')->first();
+
+                $cartCount = $cart?->items_count ?? 0;
+            }
+
+            $view->with('cartCount', $cartCount);
+        });
     }
 }

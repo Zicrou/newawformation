@@ -105,3 +105,21 @@
 .animate-blob {
     animation: blob 12s infinite ease-in-out;
 }
+@keyframes cartBounce {
+
+    0%,100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.4);
+    }
+
+}
+
+
+.cart-animation {
+
+    animation: cartBounce .4s ease;
+
+}

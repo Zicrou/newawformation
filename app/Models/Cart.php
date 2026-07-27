@@ -5,21 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 // use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Concerns\HasUuid;
+use App\Models\CartItems;
 
 class Cart extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuid;
     // use SoftDeletes;
     
     protected $fillable = [
-        'cours_id',
         'user_id',
         'paid',
     ];
 
-    public function cours()
+    public function user()
     {
-        return $this->belongsTo(Cours::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(CartItems::class);
     }
 
     

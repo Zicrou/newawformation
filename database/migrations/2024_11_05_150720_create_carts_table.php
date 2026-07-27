@@ -15,11 +15,6 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('cours_id');
-            $table->foreign('cours_id')
-            ->references('id')
-            ->on('cours')
-            ->onDelete('cascade');
             $table->uuid('user_id');
             $table->foreign('user_id')
             ->references('id')

@@ -37,9 +37,13 @@
 
                     <li>
                         <a href="{{ route('cart.index') }}"
-                            class="{{ request()->routeIs('cart.*') ? 'text-yellow-300' : 'text-white hover:text-yellow-300' }}">
-                            Panier
-                        </a>
+                            class="relative flex h-11 w-11 items-center justify-center rounded-xl bg-white text-indigo-600 shadow">
+                                🛒
+                                <span id="cart-count"
+                                    class="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white transition">
+                                    {{ $cartCount ?? 0 }}
+                                </span>
+                            </a>
                     </li>
 
                     <li>
@@ -138,9 +142,22 @@
             @auth
 
                 <a href="{{ route('cart.index') }}"
-                    class="block rounded-lg px-3 py-2 text-white hover:bg-indigo-600"
-                    @click="open = false">
-                    Panier
+                    class="relative flex h-11 w-11 items-center justify-center rounded-xl bg-white text-indigo-600 shadow">
+
+                        🛒
+
+                        <span
+                            id="cart-count"
+                            class="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                        
+                            @if($cartCount > 0)
+                                <span id="cart-count">
+                                    {{ $cartCount }}
+                                </span>
+                            @endif
+                            
+                        </span>
+
                 </a>
 
                 <a href="{{ route('dashboard') }}"

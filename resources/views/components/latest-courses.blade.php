@@ -21,94 +21,36 @@
 
         <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
 
-            @foreach($cours as $cour)
+        @forelse($cours as $cour)
 
-                <article
-                    class="group overflow-hidden rounded-3xl bg-white shadow-lg transition duration-500 hover:-translate-y-3 hover:shadow-2xl">
+                <x-course-card :cour="$cour" />
 
-                    <div class="relative overflow-hidden">
+            @empty
 
-                        <img
-                            src="{{ asset($cour->thumbnail) }}"
-                            class="h-60 w-full object-cover transition duration-700 group-hover:scale-110">
+                <div class="col-span-full rounded-3xl border border-dashed border-gray-300 bg-gray-50 p-20 text-center">
 
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent">
-                        </div>
+                    <div class="text-6xl">
 
-                        <span
-                            class="absolute left-4 top-4 rounded-full bg-yellow-400 px-3 py-1 text-xs font-bold text-gray-900">
-
-                            Nouveau
-
-                        </span>
+                        🔍
 
                     </div>
 
-                    <div class="space-y-5 p-7">
+                    <h3 class="mt-6 text-3xl font-bold">
 
-                        <h3
-                            class="line-clamp-2 text-xl font-bold text-gray-900">
+                        Aucun résultat
 
-                            {{ $cour->title }}
+                    </h3>
 
-                        </h3>
+                    <p class="mt-3 text-gray-500">
 
-                        <p
-                            class="line-clamp-3 text-gray-600">
+                        Essayez un autre mot-clé ou augmentez votre budget.
 
-                            {{ Str::words(strip_tags($cour->description),20) }}
-                            
-                        </p>
-                        <div
-                            class="flex items-center justify-between">
+                    </p>
 
-                            <div>
+                </div>
 
-                                <p
-                                    class="text-2xl font-bold text-indigo-600">
+            @endforelse
 
-                                    {{ number_format($cour->price,0,' ',' ') }} £
-
-                                </p>
-
-                            </div>
-
-                            <span
-                                class="text-sm text-gray-500">
-
-                                {{ $cour->updated_at->diffForHumans() }}
-
-                            </span>
-
-                        </div>
-
-                        <div
-                            class="flex items-center justify-between pt-4">
-
-                            <button
-                                data-course="{{ $cour->id }}"
-                                class="like-btn flex h-12 w-12 items-center justify-center rounded-full border transition hover:bg-red-50">
-
-                                <i class="bi bi-heart text-xl"></i>
-
-                            </button>
-
-                            <a
-                                href="{{ route('cour.show',['slug'=>$cour->getSlug(),'cour'=>$cour]) }}"
-                                class="rounded-xl bg-indigo-600 px-6 py-3 font-semibold text-white transition hover:bg-indigo-700">
-
-                                Voir le cours
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                </article>
-
-            @endforeach
 
         </div>
 

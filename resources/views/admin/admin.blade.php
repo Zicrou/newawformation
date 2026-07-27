@@ -11,8 +11,7 @@
     <title>@yield('title') | Administration</title>
 
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -23,7 +22,15 @@
     
     @php
         $route = request()->route()->getName();
+    
+         $cart = auth()->user()
+            ->cart()
+            ->with('items.cours')
+            ->first();
+            $cartCount = $cart?->items->count() ?? 0;
+
     @endphp
+
 
 @include('shared.nav')
 
@@ -36,6 +43,7 @@
     
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 <x-footer />
 </body>
 

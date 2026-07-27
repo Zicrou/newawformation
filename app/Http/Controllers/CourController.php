@@ -24,8 +24,7 @@ class CourController extends Controller
         // $like = $cour->likes()->where('user_id', $user->id)->exists();
         // // dd($like);
 
-        $query = Cours::query()->where('disponible', '=', 1)->with('tags')
-    ->withCount('likes');
+        $query = Cours::query()->where('disponible', '=', 1)->with('tags')->with('cartItems')->withCount('likes');
    
         
         if ($price = $request->validated('price')) {
@@ -34,23 +33,23 @@ class CourController extends Controller
         if ($title = $request->validated('title')) {
             $query = $query->where('title', 'like', "%{$title}%");
         }
-        // $product = Product::where('cours_id', '=', $cour->id)
-        // ->where('user_id', '=', Auth::user()->id)
-        // ->where('paid', '=', 1)->get();
-        
-        //$result = $query->created_at->diffForHumans()->get();
         return view('cour.index', [
             'cours' => $query->paginate(12),
-            'input' => $request->validated()
+            'input' => $request->validated(),
+            'cartCount' => Cart::where('user_id', auth()->id())->orderBy('desc')->count(),
         ]);
     }
 
     public function show(string $slug, Cours $cour)
     {
-        $cart = Cart::where('cours_id', '=', $cour->id)
-        ->where('user_id', '=', Auth::user()->id)
-        ->where('paid', '=', 1)->get();
-        
+        if(Auth::check()){
+            $cart = Cart::where('cours_id', '=', $cour->id)
+            ->where('user_id', '=', Auth::user()->id)
+            ->where('paid', '=', 1)->get();
+        }else{
+            $cart = new Cart();
+            
+        }
         $expectedSlug = $cour->getSlug();
         if ($slug !== $expectedSlug) {
             return to_route('cour.show', ['slug' => $expectedSlug, 'cour' => $cour]);

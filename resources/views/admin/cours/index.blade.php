@@ -20,10 +20,17 @@
                 </div>
 
                 <a
+                    href="{{ route('admin.tag.index') }}"
+                    class="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-indigo-700">
+                    Liste des tags
+                </a>
+                
+                <a
                     href="{{ route('admin.cours.create') }}"
                     class="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-indigo-700">
-                    + Ajouter un tag
+                    + Ajouter un cours
                 </a>
+                
             </div>
 
             <!-- Table -->

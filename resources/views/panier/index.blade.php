@@ -1,57 +1,56 @@
 @extends('base')
 
 @section('title', 'Mon Panier')
-  @include("shared.nav")
 @section('content')
 
-    <section class="mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-lg-12">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <h1 class="">@yield('title')</h1>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-12">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Cover</th>
-                                <th>Titre</th>
-                                <th>Prix</th>
-                                <th class="text-end">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($carts as $cart)
-                                <tr>
-                                    <td class="m-0"><img src="{{ asset($cart->cours->thumbnail) }}" alt="" style="width:2.9rem;height: auto"></td>
-                                    {{-- <td><video controls src="{{ asset($cart->video) }}" style="width:200px;height:175px"></video></td> --}}
-                                    <td>{{ $cart->cours->title }}</td>
-                                    <td>{{ number_format($cart->cours->price, thousands_separator: ' ') }}</td>
-                                    <td class="d-flex gap-2 justify-content-end">
-                                        <a href="{{ route('stripe.checkout', ['cour' => $cart->cours]) }}" class="btn btn-primary">Acheter</a>
-                                        <form action="{{ route('cart.delete', $cart->cours->id) }}" method="post">
-                                            @csrf
-                                            @method("post")
-                                            <input type="hidden" name="cours" id="cours" value="{{ $cart->cours->id}}">
-                                            <button class="btn btn-danger">Supprimer</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center">Votre panier est vide.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="mx-10">
+        
+    @foreach($cart->items as $item)
+        <div class="flex items-center gap-6 rounded-2xl bg-white p-6 shadow">
+
+        <img
+            src="{{ asset($item->cours->thumbnail) }}"
+            class="h-28 w-40 rounded-xl object-cover">
+
+        <div class="flex-1">
+
+            <h3 class="text-xl font-bold">
+
+                {{ $item->cours->title }}
+
+            </h3>
+
+            <p class="mt-2 text-gray-500">
+
+                {{ Str::words(strip_tags($item->cours->description),15) }}
+
+
+            </p>
+            <button
+            type="button"
+            class="remove-cart-item rounded-lg bg-red-600 px-3 py-2 text-white transition hover:bg-red-700"
+            data-id="{{ $item->id }}"
+            data-url="{{ route('cart.item.destroy', $item) }}">
+
+            🗑 Supprimer
+
+        </button>
+
         </div>
-    </section>
-    
+
+        <div class="text-right">
+
+            <p class="text-2xl font-bold text-indigo-700">
+
+                {{ number_format($item->cours->price, thousands_separator:' ') }} FCFA
+
+            </p>
+
+        </div>
+
+    </div>
+    @endforeach
+    </div>
     
 
-    {{ $carts->links() }}
 @endsection

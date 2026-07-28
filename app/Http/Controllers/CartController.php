@@ -100,7 +100,7 @@ class CartController extends Controller
 
     public function removeItem(CartItems $item)
     {
-        dd($item);
+        
         abort_unless($item->cart->user_id === auth()->id(), 403);
 
         $item->delete();

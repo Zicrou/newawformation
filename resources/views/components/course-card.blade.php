@@ -123,18 +123,16 @@
                 Voir le cours
 
             </a>
-            <form action="{{ route('cart.store', ['courId' => $cour->id]) }}" method="POST">
-                @csrf
+            <form action="{{ route('cart.store', ['courId' => $cour->id]) }}" method="POST"> 
+                 @csrf
 
                 <input type="hidden" name="courId" value="{{ $cour->id }}">
 
                 <button
                     type="submit"
-                    class="add-to-cart rounded-xl px-5 py-3 font-semibold text-white transition
-                        {{ session('status') === 'added'
-                            ? 'bg-green-600'
-                            : 'bg-white-600 hover:bg-indigo-700' }}"
-                    data-status="{{ session('status') }}">
+                    class="add-to-cart rounded-xl px-5 py-3 font-semibold text-white transition {{ session('status') === 'added' ? 'bg-green-600' : 'bg-white-600 hover:bg-indigo-700' }}"
+                    data-status="{{ session('status') }}"
+                    data-url="{{ route('cart.store', ['courId' => $cour->id]) }}">
                     {{ session('status') === 'added' ? '✓' : '🛒' }}
                 </button>
             </form>

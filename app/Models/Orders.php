@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Concerns\HasUuid;
-use App\Models\OrderItems;
+use App\Models\OrderItem;
 
 class Orders extends Model
 {
@@ -29,7 +29,7 @@ class Orders extends Model
 
     public function items()
     {
-        return $this->hasMany(OrderItems::class);
+        return $this->hasMany(OrderItem::class);
     }
 
     

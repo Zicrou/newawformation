@@ -18,9 +18,13 @@ return new class extends Migration
             ->references('id')
             ->on('users')
             ->onDelete('cascade');
-            $table->decimal('price', 10, 2); //double
+            $table->decimal('total', 10, 2); //double
             $table->string('payment_method');
-            $table->string('payment_status')->default('pending');
+            $table->enum('status', [
+                'pending',
+                'paid',
+                'cancelled'
+            ])->default('pending');
             $table->string('transaction_id');
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();

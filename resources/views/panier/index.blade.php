@@ -1,74 +1,220 @@
 @extends('base')
 
 @section('title', 'Mon Panier')
+
 @section('content')
 
-    <div class="mx-10 {{ ($cart?->items->count() ?? 0) == 0 ? 'hidden' : ''}}" id="card-container" data-cartcount = "{{ $cart->items->count() ?? 0 }}">
-        @foreach($cart->items as $item)
-            <div class="flex items-center gap-6 rounded-2xl bg-white p-6 shadow" id="cart-item-{{ $item->id }}">
+<div 
+    class="mx-10 {{ ($cart?->items->count() ?? 0) == 0 ? 'hidden' : '' }}" 
+    id="card-container"
+    data-cartcount="{{ $cart?->items->count() ?? 0 }}"
+>
 
-                <img
-                    src="{{ asset($item->cours->thumbnail) }}"
-                    class="h-28 w-40 rounded-xl object-cover">
+    <div class="overflow-hidden rounded-2xl bg-white shadow">
 
-                <div class="flex-1">
+        <table class="w-full text-left">
 
-                    <h3 class="text-xl font-bold">
+            <thead class="bg-gray-100">
 
-                        {{ $item->cours->title }}
+                <tr>
 
-                    </h3>
+                    <th class="px-6 py-4">
+                        <input 
+                            type="checkbox" 
+                            id="select-all"
+                            class="h-5 w-5 rounded"
+                            checked
+                        >
+                    </th>
 
-                    <p class="mt-2 text-gray-500">
+                    <th class="px-6 py-4">
+                        Cours
+                    </th>
 
-                        {{ Str::words(strip_tags($item->cours->description),15) }}
+                    <th class="px-6 py-4">
+                        Prix
+                    </th>
+
+                    <th class="px-6 py-4 text-center">
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
 
 
-                    </p>
-                    <button type="button" class="remove-cart-item rounded-lg bg-red-600 px-3 py-2 text-white hover:bg-red-700" data-id="{{ $item->id }}" data-url="{{ route('cart.item.destroy', $item) }}">
+            <tbody>
 
-                        🗑 Supprimer
+                @foreach($cart->items as $item)
 
-                    </button>
+                <tr 
+                    class="border-b"
+                    id="cart-item-{{ $item->id }}"
+                >
 
-                </div>
+                    {{-- Checkbox sélection --}}
+                    <td class="px-6 py-4">
 
-                <div class="text-right">
+                        <input 
+                            type="checkbox"
+                            class="cart-item-checkbox h-5 w-5 rounded"
+                            data-id="{{ $item->id }}"
+                            data-price="{{ $item->cours->price }}"
+                            checked
+                        >
 
-                    <p class="text-2xl font-bold text-indigo-700">
+                    </td>
 
-                        {{ number_format($item->cours->price, thousands_separator:' ') }} FCFA
 
-                    </p>
+                    {{-- Informations cours --}}
+                    <td class="px-6 py-4">
 
-                </div>
+                        <div class="flex items-center gap-4">
 
-            </div>
+                            <img
+                                src="{{ asset($item->cours->thumbnail) }}"
+                                class="h-20 w-32 rounded-xl object-cover"
+                            >
 
-        @endforeach
-            
+                            <div>
+
+                                <h3 class="font-bold text-lg">
+                                    {{ $item->cours->title }}
+                                </h3>
+
+
+                                <p class="text-gray-500 text-sm">
+
+                                    {{ Str::words(strip_tags($item->cours->description),15) }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    {{-- Prix --}}
+                    <td class="px-6 py-4">
+
+                        <span class="font-bold text-indigo-700">
+
+                            {{ number_format($item->cours->price, 2, ',', ' ') }}
+                            €
+
+                        </span>
+
+                    </td>
+
+
+                    {{-- Action --}}
+                    <td class="px-6 py-4 text-center">
+
+                        <button
+                            type="button"
+                            class="remove-cart-item rounded-lg bg-red-600 px-3 py-2 text-white hover:bg-red-700"
+                            data-id="{{ $item->id }}"
+                            data-url="{{ route('cart.item.destroy', $item) }}"
+                        >
+
+                            🗑 Supprimer
+
+                        </button>
+
+                    </td>
+
+
+                </tr>
+
+                @endforeach
+
+
+            </tbody>
+
+        </table>
+
+
     </div>
-    
-    <div id="empty-cart" class="{{ ($cart?->items->count() ?? 0) > 0 ? 'hidden' : '' }} rounded-3xl bg-white p-16 text-center shadow-xl">
 
-        <div class="mb-5 text-8xl">🛒</div>
 
-        <h2 class="text-3xl font-bold">
-            Votre panier est vide
-        </h2>
+    {{-- Total --}}
+    <div class="mt-6 flex justify-end">
 
-        <p class="mt-3 text-gray-500">
-            Ajoutez des formations pour commencer votre apprentissage.
-        </p>
+        <div class="rounded-xl bg-white p-6 shadow">
 
-        <a
-            href="{{ route('cour.index') }}"
-            class="mt-8 inline-block rounded-xl bg-indigo-600 px-8 py-4 font-semibold text-white hover:bg-indigo-700">
+            <p class="text-lg">
 
-            Explorer les formations
+                Total :
 
-        </a>
+                <span 
+                    id="cart-total"
+                    class="font-bold text-indigo-700"
+                >
+
+                    {{ number_format($cart->items->sum(fn($item)=>$item->cours->price), thousands_separator:' ') }}
+
+                </span>
+
+                FCFA
+
+            </p>
+
+
+            <button
+                id="checkout"
+                class="mt-4 rounded-xl bg-indigo-600 px-6 py-3 text-white hover:bg-indigo-700"
+            >
+
+                Passer la commande
+
+            </button>
+
+
+        </div>
 
     </div>
+
+
+</div>
+
+
+
+{{-- Panier vide --}}
+
+<div 
+    id="empty-cart" 
+    class="{{ ($cart?->items->count() ?? 0) > 0 ? 'hidden' : '' }} rounded-3xl bg-white p-16 text-center shadow-xl"
+>
+
+    <div class="mb-5 text-8xl">
+        🛒
+    </div>
+
+
+    <h2 class="text-3xl font-bold">
+        Votre panier est vide
+    </h2>
+
+
+    <p class="mt-3 text-gray-500">
+        Ajoutez des formations pour commencer votre apprentissage.
+    </p>
+
+
+    <a
+        href="{{ route('cour.index') }}"
+        class="mt-8 inline-block rounded-xl bg-indigo-600 px-8 py-4 font-semibold text-white hover:bg-indigo-700"
+    >
+
+        Explorer les formations
+
+    </a>
+
+
+</div>
+
 
 @endsection

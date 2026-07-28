@@ -3,6 +3,7 @@
 import Alpine from 'alpinejs';
 import './cart';
 import './like';
+import './panier';
 window.Alpine = Alpine;
 
 Alpine.start();
@@ -65,8 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
     counters.forEach(counter => observer.observe(counter));
 
 });
-
-
 
 
 

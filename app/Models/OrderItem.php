@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Concerns\HasUuid;
 
-class OrderItems extends Model
+class OrderItem extends Model
 {
     use HasFactory, HasUuid;
     // use SoftDeletes;

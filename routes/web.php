@@ -35,8 +35,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('panier', [CartController::class, 'index'])->name('cart.index');
     
-    Route::post('panier/{cartId}', [CartController::class, 'destroy'])->name('cart.delete');
-    
+        
     Route::delete('/panier/item/{item}', [CartController::class, 'removeItem'])
         ->name('cart.item.destroy');
     

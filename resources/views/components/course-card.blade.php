@@ -130,7 +130,7 @@
     
                     <input type="hidden" name="courId" value="{{ $cour->id }}">
     
-                    <button type="button" class="add-to-cart rounded-xl px-5 py-3 font-semibold text-white transition bg-white-600 hover:bg-indigo-700" data-url="{{ route('cart.store') }}" data-course="{{ $cour->id }}">
+                    <button type="button" class="add-to-cart rounded-xl px-5 py-3 font-semibold text-white transition bg-white hover:bg-indigo-700" data-url="{{ route('cart.store') }}" data-course="{{ $cour->id }}">
 
                         🛒 
 
@@ -143,6 +143,3 @@
     </div>
 
 </div>
-
-<script>
-</script>

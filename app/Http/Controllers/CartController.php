@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use App\Models\CartItems;
 
+
 class CartController extends Controller
 {
     /**
@@ -100,16 +101,13 @@ class CartController extends Controller
      */
     public function destroy(Request $request)
     {
-        $cart = Cart::where('cours_id', $request->cours)->with('cours')->where('user_id', Auth::user()->id)->first();
-        // dd($cart->cours->id);
-        if ($cart) {
-            $cart->delete();
-        }
-        // $cart = Cart::where('id', $id)->first();
-        // if (File::exists($cart->image)) {
-        //     File::delete($cart->image);
-        // }
-        //$cart->delete();
+      
+        $cart = auth()->user()->cart;
+        
+        $item = $cart->items()
+            ->where('cours_id', $request->courId)
+            ->first();
+          
         return to_route('cart.index')->with('success', 'Le produit a été supprimé');
     }
 

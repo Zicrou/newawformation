@@ -45,6 +45,15 @@
 </main>
 
 <x-footer />
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+    new TomSelect('#tags', {
+        plugins: ['remove_button']
+    });
+
+});
+</script>
 </body>
 
 </html>

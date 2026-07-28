@@ -1,4 +1,5 @@
-
+import { showToast } from "./toast";
+// Liker un cours
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.like-btn').forEach(button => {
 
@@ -22,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 heart.classList.add('text-red-500');
 
                 likes.textContent = data.likesCount;
-
+                
             } else {
 
                 heart.classList.remove('text-red-500');
@@ -30,10 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 likes.textContent = data.likesCount;
             }
-                // });
-                
-                
-                
+            
+            showToast(data.status === "liked"
+                        ? "Cours ajouté au favoris."
+                        : "Ce cours est supprimé de vos favoris.")
 
         });
     });

@@ -38,22 +38,37 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'courId' => ['required', 'exists:cours,id'],
         ]);
+
         $cart = Cart::firstOrCreate([
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'paid' => false,
         ]);
 
-        $cart->items()->firstOrCreate([
-            'cours_id' => $data['courId'],
-        ]);
+        $item = $cart->items()
+            ->where('cours_id', $request->courId)
+            ->first();
 
-        if ($cart->wasRecentlyCreated) {
-            return back()->with('success', 'Cours ajouté au panier.');
+        if (!$item) {
+
+            $cart->items()->create([
+                'cours_id' => $request->courId,
+            ]);
+
+            $status = 'added';
+
+        } else {
+
+            $status = 'exists';
+
         }
 
-        return back()->with('info', 'Ce cours est déjà dans votre panier.')->with('status', 'added');
+        return response()->json([
+            'status' => $status,
+            'cartCount' => $cart->items()->count(),
+        ]);
     }
 
     /**

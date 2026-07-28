@@ -40,9 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/panier/item/{item}', [CartController::class, 'removeItem'])
         ->name('cart.item.destroy');
     
-        Route::post('/panier/store/{courId}', [CartController::class, 'store'])
-        ->middleware('auth')
-        ->name('cart.store');
+        Route::post('/panier/store', [CartController::class, 'store'])
+    ->name('cart.store');
 });
 
     //Admins

@@ -123,19 +123,21 @@
                 Voir le cours
 
             </a>
-            <form action="{{ route('cart.store', ['courId' => $cour->id]) }}" method="POST"> 
-                 @csrf
+            <div>
+                
+                <!-- <form action="{{ route('cart.store', ['courId' => $cour->id]) }}" method="POST">  -->
+                     <!-- @csrf -->
+    
+                    <input type="hidden" name="courId" value="{{ $cour->id }}">
+    
+                    <button type="button" class="add-to-cart rounded-xl px-5 py-3 font-semibold text-white transition bg-white-600 hover:bg-indigo-700" data-url="{{ route('cart.store') }}" data-course="{{ $cour->id }}">
 
-                <input type="hidden" name="courId" value="{{ $cour->id }}">
+                        🛒 
 
-                <button
-                    type="submit"
-                    class="add-to-cart rounded-xl px-5 py-3 font-semibold text-white transition {{ session('status') === 'added' ? 'bg-green-600' : 'bg-white-600 hover:bg-indigo-700' }}"
-                    data-status="{{ session('status') }}"
-                    data-url="{{ route('cart.store', ['courId' => $cour->id]) }}">
-                    {{ session('status') === 'added' ? '✓' : '🛒' }}
-                </button>
-            </form>
+                    </button>
+                <!-- </form> -->
+
+            </div>
         </div>
 
     </div>
@@ -143,42 +145,4 @@
 </div>
 
 <script>
-document.querySelectorAll('.like-btn').forEach(button => {
-
-    button.addEventListener('click', async function () {
-
-        const response = await fetch(this.dataset.url, {
-            method: 'POST'})
-        const data = await response.json();
-            if(data.message == "Please log in first."){
-                alert("Veuillez vous connecté svp")
-            }
-
-        const heart = this.querySelector('.heart');
-        
-        console.log("We're here");
-        const likes = document.getElementById('likes-count');
-
-        if (data.status === 'liked') {
-
-            heart.classList.remove('text-gray-500');
-            heart.classList.add('text-red-500');
-
-            likes.textContent = data.likesCount;
-
-        } else {
-
-            heart.classList.remove('text-red-500');
-            heart.classList.add('text-gray-500');
-
-            likes.textContent = data.likesCount;
-        }
-            // });
-            
-            
-            
-
-    });
-
-});
 </script>

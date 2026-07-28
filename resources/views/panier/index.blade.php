@@ -58,11 +58,11 @@
 
                         <input 
                             type="checkbox"
-                            class="cart-item-checkbox h-5 w-5 rounded"
+                            class="item-checkbox cart-item-checkbox h-5 w-5 rounded"
                             data-id="{{ $item->id }}"
                             data-price="{{ $item->cours->price }}"
                             checked
-                        >
+                            value="{{ $item->id }}">
 
                     </td>
 
@@ -164,7 +164,7 @@
 
 
             <button
-                id="checkout"
+                id="checkout-btn"
                 class="mt-4 rounded-xl bg-indigo-600 px-6 py-3 text-white hover:bg-indigo-700"
             >
 

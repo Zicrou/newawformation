@@ -9,6 +9,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CKEditorController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\OrderController;
 
 $idRegex = '[0-9a-z\-]+';
 $slugRegex = '[0-9a-z\-]+';
@@ -41,7 +42,15 @@ Route::middleware('auth')->group(function () {
     
         Route::post('/panier/store', [CartController::class, 'store'])
     ->name('cart.store');
+
 });
+
+// Orders
+Route::post('/orders',
+    [OrderController::class,'store']
+)
+->middleware('auth')
+->name('orders.store');
 
     //Admins
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function(){

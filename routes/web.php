@@ -40,17 +40,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/panier/item/{item}', [CartController::class, 'removeItem'])
         ->name('cart.item.destroy');
     
-        Route::post('/panier/store', [CartController::class, 'store'])
+    Route::post('/panier/store', [CartController::class, 'store'])
     ->name('cart.store');
+
+
 
 });
 
-// Orders
-Route::post('/orders',
-    [OrderController::class,'store']
-)
-->middleware('auth')
-->name('orders.store');
 
     //Admins
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function(){
@@ -77,7 +73,27 @@ Route::post('/ckeditor/upload', [CKEditorController::class, 'upload'])
     
     //Stripes
 Route::get('/stripe', [StripeController::class, 'stripe'])->name('stripe.index');
+
 Route::get('stripe/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout');
+
 Route::get('stripe/checkout/success', [StripeController::class, 'success'])->name('stripe.checkout.success');
+
+// Orders
+
+Route::prefix('orders')->name('orders.')->middleware(['auth'])->group(function(){
+    Route::post('/',
+        [OrderController::class,'store']
+    )->name('store');
+        
+    Route::get('/{order}', [
+        OrderController::class,
+        'show'
+    ])->name('show');
+
+    Route::get('/{order}/annulation', [
+        OrderController::class,
+        'annulation'
+    ])->name('annulation');
+});
 
 require __DIR__.'/auth.php';

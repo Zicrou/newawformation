@@ -14,18 +14,24 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+        
+        $request->validate(
+            [
+                'items' => ['required', 'array'],
+                'items.*' => ['exists:cart_items,id'],
+            ],
+            [
+                'items.required' => 'Veuillez sélectionner au moins une formation.',
+            ],
+            [
+                'items' => 'formations',
+            ]
+        );
 
-        $request->validate([
 
-            'items'=> ['required', 'array'],
-
-            'items.*'=> ['exists:cart_items,id']
-
-        ]);
-
-
-
-        $order = DB::transaction(function() use ($request){
+        // $cart = auth()->user()->cart;
+        
+        // $order = DB::transaction(function() use ($request){
 
 
             $cartItems = CartItems::whereIn(
@@ -41,31 +47,27 @@ class OrderController extends Controller
             ->get();
 
 
-
+            
             $total = $cartItems->sum(function($item){
-
+                
                 return $item->cours->price;
-
-            });
-
-
-
-            $order = Order::create([
-
-                'user_id'=>auth()->id(),
-
-                'total'=>$total,
-
-                'status'=>'pending',
-                'payment_method'=> 'carte',
-                'transaction_id' => '111'
-
-            ]);
-
-
+                
+                });
+                
+                
+                $order = Order::create([
+                    
+                    'user_id'=>auth()->id(),
+                    
+                    'total'=>$total,
+                    
+                    'status'=>'pending',
+                    'payment_method'=> 'carte',
+                    'transaction_id' => '111'
+                    
+                    ]);            
 
             foreach($cartItems as $item){
-
 
                 $order->items()->create([
 
@@ -75,24 +77,47 @@ class OrderController extends Controller
 
                 ]);
 
-
             }
 
+        return redirect()
+            ->route('orders.show',$order)
+            ->with('success','Commande créée');
 
-            return $order;
+    }
+
+    public function show(Order $order)
+    {
+
+        abort_unless(
+            $order->user_id === auth()->id(),
+            403
+        );
 
 
-        });
+        $order->load('items.cours');
 
 
+        return view(
+            'orders.show',
+            compact('order')
+        );
 
-        return response()->json([
+    }
 
-            'success'=>true,
+    public function annulation(Order $order)
+    {
 
-            'orderId'=>$order->id
+        abort_unless(
+            $order->user_id === auth()->id(),
+            403
+        );
 
-        ]);
+
+        $order->items()->delete();
+        $order->delete();
+
+
+        return redirect()->route('cart.index');
 
     }
 }

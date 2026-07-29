@@ -6,20 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Concerns\HasUuid;
-use App\Models\OrderItem;
+use App\Models\CartItems;
 
-class Order extends Model
+class Enrollment extends Model
 {
     use HasFactory, HasUuid;
     // use SoftDeletes;
     
     protected $fillable = [
         'user_id',
-        'total',
-        'payment_method',
-        'status',
-        'transaction_id',
-        'paid_at',
+        'cours_id',
     ];
 
     public function user()
@@ -27,9 +23,9 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function items()
+    public function cours()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsTo(Cours::class);
     }
 
     

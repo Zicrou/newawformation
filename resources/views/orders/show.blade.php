@@ -58,20 +58,17 @@
 
         <div class="mt-8 flex items-end justify-between">
 
-            <form method="POST" action="{{ route('orders.store') }}">
-                @csrf
-
-                <button
-                    type="submit"
-                    class="rounded-xl bg-indigo-600 px-8 py-4 text-white hover:bg-indigo-700">
-                    Procéder au paiement
-                </button>
-            </form>
-
             <a
                 href="{{ route('orders.annulation', ['order' => $order]) }}"
                 class="rounded-xl bg-gray-500 px-8 py-4 text-white hover:bg-gray-600">
                 Annuler
+            </a>
+
+            <a href="{{ route('payments.create',$order) }}"
+                class="rounded-xl bg-indigo-600 px-8 py-4 text-white">
+
+                Procéder au paiement
+
             </a>
 
         </div>

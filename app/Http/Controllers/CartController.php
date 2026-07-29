@@ -18,6 +18,8 @@ class CartController extends Controller
      */
     public function index()
     {
+
+        Log::info('Test Laravel log');
         
         $cart = auth()->user()
             ->cart()

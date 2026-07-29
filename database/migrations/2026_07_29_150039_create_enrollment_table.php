@@ -11,22 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('enrollment', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            
+            $table->uuid('cours_id');
+            $table->foreign('cours_id')
+            ->references('id')
+            ->on('cours')
+            ->onDelete('cascade');
             $table->uuid('user_id');
             $table->foreign('user_id')
             ->references('id')
             ->on('users')
             ->onDelete('cascade');
-            $table->decimal('total', 10, 2); //double
-            $table->string('payment_method')->nullable();
-            $table->enum('status', [
-                'pending',
-                'paid',
-                'cancelled'
-            ])->default('pending');
-            $table->string('transaction_id')->nullable();
-            $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });
     }
@@ -36,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('enrollment');
     }
 };

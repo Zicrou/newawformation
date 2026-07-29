@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\CKEditorController;
 use App\Http\Controllers\StripeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 
 $idRegex = '[0-9a-z\-]+';
 $slugRegex = '[0-9a-z\-]+';
@@ -95,5 +96,37 @@ Route::prefix('orders')->name('orders.')->middleware(['auth'])->group(function()
         'annulation'
     ])->name('annulation');
 });
+
+Route::middleware('auth')->group(function () {
+
+    Route::get(
+        '/orders/{order}/payment',
+        [PaymentController::class, 'create']
+    )->name('payments.create');
+
+    // Route::view('payments/create', compact('orders'));
+
+    Route::post(
+        '/orders/{order}/payment',
+        [PaymentController::class, 'store']
+    )->name('payments.store');
+
+    Route::get(
+        '/payments/success',
+        [PaymentController::class, 'success']
+    )->name('payments.success');
+
+    Route::get(
+        '/payments/cancel',
+        [PaymentController::class, 'cancel']
+    )->name('payments.cancel');
+
+    Route::get('/orders/{order}/status', [PaymentController::class, 'status'])
+    ->name('orders.status');
+
+});
+
+Route::post('/stripe/webhook', [PaymentController::class, 'webhook'])
+    ->name('stripe.webhook');
 
 require __DIR__.'/auth.php';

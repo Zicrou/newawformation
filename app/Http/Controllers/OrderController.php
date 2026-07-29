@@ -62,9 +62,6 @@ class OrderController extends Controller
                     'total'=>$total,
                     
                     'status'=>'pending',
-                    'payment_method'=> 'carte',
-                    'transaction_id' => '111'
-                    
                     ]);            
 
             foreach($cartItems as $item){

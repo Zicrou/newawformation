@@ -122,7 +122,7 @@ Route::middleware('auth')->group(function () {
     )->name('payments.cancel');
 
     Route::get('/orders/{order}/status', [PaymentController::class, 'status'])
-    ->name('orders.status');
+    ->name('payments.status');
 
 });
 

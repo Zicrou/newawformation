@@ -44,7 +44,7 @@
                 href="{{ route('dashboard') }}"
                 class="mt-8 inline-block rounded-xl bg-indigo-600 px-8 py-4 text-white">
 
-                Accéder à mes formations
+                Voir mes formations
 
             </a>
 
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const interval = setInterval(async () => {
 
         const response = await fetch(
-            "{{ route('orders.status', $order) }}"
+            "{{ route('payments.status', $order) }}"
         );
 
         const data = await response.json();
@@ -71,8 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log(data);
 
-
-        if(data.status === 'paid') {
+        if(data.status == 'paid') {
 
             clearInterval(interval);
 

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 // use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Concerns\HasUuid;
-use App\Models\CartItems;
+use App\Models\CartItem;
 
 class Cart extends Model
 {
@@ -25,7 +25,7 @@ class Cart extends Model
 
     public function items()
     {
-        return $this->hasMany(CartItems::class);
+        return $this->hasMany(CartItem::class);
     }
 
     

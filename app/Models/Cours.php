@@ -46,7 +46,7 @@ class Cours extends Model
 
    public function cartItems()
     {
-        return $this->hasMany(CartItems::class);
+        return $this->hasMany(CartItem::class);
     }   
 
     public function likes()

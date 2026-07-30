@@ -9,7 +9,8 @@ use Stripe\Checkout\Session;
 use Stripe\Webhook;
 use Stripe\Exception\SignatureVerificationException;
 use Illuminate\Support\Facades\Log;
-
+use \App\Models\Enrollment;
+use \App\Models\CartItem;
 class PaymentController extends Controller
 {
     public function store(Order $order)
@@ -71,11 +72,21 @@ class PaymentController extends Controller
                 ]);
 
                 foreach($order->items as $item) {
-                    \App\Models\Enrollment::create([
+                    Enrollment::create([
                         'user_id' => auth()->id(),
                         'cours_id' => $item->cours_id
                     ]);
+
+                    CartItem::where('cours_id', $item->cours_id)
+                        ->whereHas('cart', function ($query) {
+                            $query->where('user_id', auth()->id());
+                        })
+                        ->delete();
                 }
+
+                
+
+                
 
             }
 

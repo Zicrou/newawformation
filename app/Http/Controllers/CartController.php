@@ -8,7 +8,7 @@ use App\Models\Cours;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use App\Models\CartItems;
+use App\Models\CartItem;
 
 
 class CartController extends Controller
@@ -113,14 +113,14 @@ class CartController extends Controller
         return to_route('cart.index')->with('success', 'Le produit a été supprimé');
     }
 
-    public function removeItem(CartItems $item)
+    public function removeItem(CartItem $item)
     {
         
         abort_unless($item->cart->user_id === auth()->id(), 403);
 
         $item->delete();
 
-        $cartCount = CartItems::whereHas('cart', function ($query) {
+        $cartCount = CartItem::whereHas('cart', function ($query) {
             $query->where('user_id', auth()->id());
         })->count();
 

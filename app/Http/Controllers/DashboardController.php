@@ -25,6 +25,7 @@ class DashboardController extends Controller
             'likesCount' => Like::where('user_id', Auth::id())->count(),
 
             'cartCount' => Cart::where('user_id', Auth::id())->count(),
+            'coursAcheter' => \App\Models\Enrollment::where('user_id', Auth::id())->with('cours')->get(),
         ]);
     }
 }

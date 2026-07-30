@@ -22,9 +22,17 @@
     @endif
 
     {{-- Main Content --}}
+    <div class="flex justify-center mb-10">
+
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
+            {{ $cour->title }}
+        </h2>
+
+    </div>
     <div class="grid gap-8 lg:grid-cols-3">
 
         {{-- Course --}}
+
         <div class="lg:col-span-2">
 
             <div class="overflow-hidden rounded-2xl bg-white shadow">
@@ -65,13 +73,17 @@
 
                 </div>
 
-                <a
-                    href="{{ route('stripe.checkout', ['cour' => $cour]) }}"
-                    class="block w-full rounded-lg bg-indigo-600 py-3 text-center font-semibold text-white transition hover:bg-indigo-700">
+                @if ($acheter != true)
+                
+                    <a
+                        href="{{ auth()->check() ? route('cart.store', ['courId' => $cour->id]) : route('login') }}"
+                        class="block w-full rounded-lg bg-indigo-600 py-3 text-center font-semibold text-white transition hover:bg-indigo-700">
 
-                    Commander
+                        Commander
+                        
+                    </a>
 
-                </a>
+                @endif
 
                 <hr class="my-6">
 

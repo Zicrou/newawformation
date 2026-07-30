@@ -11,31 +11,37 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use App\Models\Enrollment;
 
 class CourController extends Controller
 {
-    public function index(SearchCoursRequest $request)
+    public function index(Request $request)
     {
-        // $cour = Cours::findOrFail(1);
+        $data = $request->validate([
+            'title' => ['string', 'nullable'],
+            'price' => ['numeric', 'nullable']
+        ]);
+        $price = $data['price'] ?? null;
 
-        // // Check if the user has already liked this post
-        // $user = Auth::user();
+        $title = $data['title'] ?? null;
+
         
-        // $like = $cour->likes()->where('user_id', $user->id)->exists();
-        // // dd($like);
-
         $query = Cours::query()->where('disponible', '=', 1)->with('tags')->with('cartItems')->withCount('likes');
-   
         
-        if ($price = $request->validated('price')) {
+        
+        if ($price) {
             $query = $query->where('price', '<=', $price);
         }
-        if ($title = $request->validated('title')) {
+            
+        if ($title) {
             $query = $query->where('title', 'like', "%{$title}%");
         }
+            
+        // dd($query->get());
+        
         return view('cour.index', [
             'cours' => $query->paginate(12),
-            'input' => $request->validated(),
+            // 'input' => $request->validated(),
             'cartCount' => Cart::where('user_id', auth()->id())->orderBy('desc')->count(),
         ]);
     }
@@ -43,11 +49,16 @@ class CourController extends Controller
     public function show(string $slug, Cours $cour)
     {
         if(Auth::check()){
-            $cart = Cart::where('cours_id', '=', $cour->id)
-            ->where('user_id', '=', Auth::user()->id)
-            ->where('paid', '=', 1)->get();
+            
+            $enrollment = Enrollment::where('cours_id', $cour->id)->where('user_id', auth()->id())->first();
+            
+            if($enrollment){
+                $acheter = true;
+            }
+
         }else{
-            $cart = new Cart();
+            
+            $acheter = false;
             
         }
         $expectedSlug = $cour->getSlug();
@@ -57,7 +68,7 @@ class CourController extends Controller
 
         return view('cour.show', [
             'cour' => $cour,
-            'cart'=> $cart,
+            'acheter'=> $acheter,
         ]);
     }
 

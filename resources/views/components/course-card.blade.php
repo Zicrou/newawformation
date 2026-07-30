@@ -123,19 +123,16 @@
                 Voir le cours
 
             </a>
+            
             <div>
-                
-                <!-- <form action="{{ route('cart.store', ['courId' => $cour->id]) }}" method="POST">  -->
-                     <!-- @csrf -->
-    
-                    <input type="hidden" name="courId" value="{{ $cour->id }}">
-    
-                    <button type="button" class="add-to-cart rounded-xl px-5 py-3 font-semibold text-white transition bg-white hover:bg-indigo-700" data-url="{{ route('cart.store') }}" data-course="{{ $cour->id }}">
 
-                        🛒 
+                <input type="hidden" name="courId" value="{{ $cour->id }}">
 
-                    </button>
-                <!-- </form> -->
+                <button type="button" class="add-to-cart rounded-xl px-5 py-3 font-semibold text-white transition bg-white hover:bg-indigo-700" data-url="{{ route('cart.store') }}" data-course="{{ $cour->id }}" data-authenticated="{{ auth()->check() }}">
+
+                    🛒 
+
+                </button>
 
             </div>
         </div>

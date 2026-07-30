@@ -3,52 +3,121 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Dashboard') }}
         </h2>
-        <div class="flex container mx-auto px-6 lg:px-8 overflow-x-auto gap-5 pb-4">
+        <div class="container mx-auto px-6 py-8">
 
-            @foreach($coursAcheter as $enrollment)
+            <!-- Titre -->
+            <div class="flex justify-center mb-10">
 
-                @php
-                    $cours = $enrollment->cours;
-                @endphp
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
+                    Mes formations
+                </h2>
 
-                @if($cours)
+            </div>
 
-                    <div class="min-w-[280px] shrink-0 rounded-xl bg-gray-100 dark:bg-gray-700 overflow-hidden shadow">
+            <!-- Liste des cours -->
+            <div class="flex gap-5 overflow-x-auto pb-4">
 
-                        <img
-                            src="{{ asset($cours->thumbnail) }}"
-                            class="h-40 w-full object-cover"
-                        >
+                @foreach($coursAcheter as $enrollment)
 
-                        <div class="p-4">
+                    @php
+                        $cours = $enrollment->cours;
+                    @endphp
 
-                            <h4 class="font-bold text-lg">
-                                {{ $cours->title }}
-                            </h4>
+                    @if($cours)
 
+                        <div class="min-w-[280px] shrink-0 rounded-xl bg-white dark:bg-gray-700 shadow">
 
-                            <p class="mt-2 text-sm text-gray-500">
-                                Prix :
-                                {{ number_format($cours->price, 2, ',', ' ') }}
-                                €
-                            </p>
+                            <img
+                                src="{{ asset($cours->thumbnail) }}"
+                                class="h-40 w-full object-cover rounded-t-xl">
 
+                            <div class="p-4">
 
-                            <a
-                                href="{{ route('cour.show', ['cour' => $cours, 'slug' => $cours->getSlug()]) }}"
-                                class="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-white">
+                                <h4 class="font-bold text-lg">
+                                    {{ $cours->title }}
+                                </h4>
 
-                                Voir le cours
+                                <p class="mt-2 text-sm text-gray-500">
+                                    {{ number_format($cours->price, 2, ',', ' ') }} €
+                                </p>
 
-                            </a>
+                                <a
+                                    href="{{ route('cour.show', [
+                                            'slug' => $cours->getSlug(),
+                                            'cour' => $cours
+                                        ]) }}"
+                                    class="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">
+
+                                    Voir le cours
+
+                                </a>
+
+                            </div>
 
                         </div>
 
-                    </div>
+                    @endif
 
-                @endif
+                @endforeach
 
-            @endforeach
+            </div>
+
+        </div>
+
+        <div class="container mx-auto px-6 py-8">
+
+            <!-- Titre -->
+            <div class="flex justify-center mb-10">
+
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
+                    Mes favoris
+                </h2>
+
+            </div>
+
+            <!-- Liste des cours -->
+            <div class="flex gap-5 overflow-x-auto pb-4">
+
+                @foreach($likes as $like)
+
+                    @if($like)
+
+                        <div class="min-w-[280px] shrink-0 rounded-xl bg-white dark:bg-gray-700 shadow">
+
+                            <img
+                                src="{{ asset($like->cours->thumbnail) }}"
+                                class="h-40 w-full object-cover rounded-t-xl">
+
+                            <div class="p-4">
+
+                                <h4 class="font-bold text-lg">
+                                    {{ $like->cours->title }}
+                                </h4>
+
+                                <p class="mt-2 text-sm text-gray-500">
+                                    {{ number_format($like->cours->price, 2, ',', ' ') }} €
+                                </p>
+
+                                <a
+                                    href="{{ route('cour.show', [
+                                            'slug' => $like->cours->getSlug(),
+                                            'cour' => $cours
+                                        ]) }}"
+                                    class="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">
+
+                                    Voir le cours
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    @endif
+
+                @endforeach
+
+            </div>
 
         </div>
 

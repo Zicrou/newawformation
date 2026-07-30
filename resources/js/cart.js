@@ -1,16 +1,14 @@
 // Ajout d'une ligne dans le panier
 import { showToast } from "./toast";
-console.log("cart.js chargé");
 document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll(".add-to-cart").forEach(button => {
 
         button.addEventListener("click", async function () {
-
-            console.log("Ajout au panier");
+            if(this.dataset.authenticated == false){
+                alert("Vous devez vous connecter d'abord");
+            }
             try {
-                console.log(this.dataset.url);
-                console.log(this.dataset.course);
                 const response = await fetch(this.dataset.url, {
                 method: "POST",
                 headers: {
@@ -25,16 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
             });
 
-            console.log("Status :", response.status);
-            console.log("URL :", response.url);
-            console.log("Content-Type :", response.headers.get("content-type"));
-
             const data = await response.json();
-
-            console.log(data);
-
-            // Arrête ici temporairement
-            // return;
 
                 if (data.status === "added") {
 

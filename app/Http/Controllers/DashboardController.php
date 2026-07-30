@@ -7,7 +7,7 @@ use App\Models\Cart;
 use App\Models\Like;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use \App\Models\Enrollment;
 class DashboardController extends Controller
 {
     public function index()
@@ -25,7 +25,7 @@ class DashboardController extends Controller
             'likesCount' => Like::where('user_id', Auth::id())->count(),
 
             'cartCount' => Cart::where('user_id', Auth::id())->count(),
-            'coursAcheter' => \App\Models\Enrollment::where('user_id', Auth::id())->with('cours')->get(),
+            'coursAcheter' => Enrollment::where('user_id', Auth::id())->with('cours')->get(),
         ]);
     }
 }

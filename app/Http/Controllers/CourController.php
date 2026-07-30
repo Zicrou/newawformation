@@ -37,7 +37,6 @@ class CourController extends Controller
             $query = $query->where('title', 'like', "%{$title}%");
         }
             
-        // dd($query->get());
         
         return view('cour.index', [
             'cours' => $query->paginate(12),

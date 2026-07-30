@@ -1,46 +1,46 @@
 @props(['cour'])
 
-<div class="group overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+<div class="group overflow-hidden min-w-[280px] shrink-0 rounded-3xl bg-white shadow-lg ring-1 ring-gray-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
 
     <!-- Image -->
     <div class="relative overflow-hidden">
 
-    <img
-        src="{{ asset($cour->thumbnail) }}"
-        alt="{{ $cour->title }}"
-        class="h-56 w-full object-cover transition duration-500 group-hover:scale-110">
+        <img
+            src="{{ asset($cour->thumbnail) }}"
+            alt="{{ $cour->title }}"
+            class="h-56 w-full object-cover transition duration-500 group-hover:scale-110">
 
-    <!-- Badge -->
-    @if($cour->disponible)
-        <span class="absolute left-4 top-4 rounded-full bg-green-500 px-3 py-1 text-xs font-bold text-white shadow">
-            Disponible
-        </span>
-    @endif
+        <!-- Badge -->
+        @if($cour->disponible)
+            <span class="absolute left-4 top-4 rounded-full bg-green-500 px-3 py-1 text-xs font-bold text-white shadow">
+                Disponible
+            </span>
+        @endif
 
-    <!-- Like -->
-    <button
-        type="button"
-        class="like-btn absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur transition hover:scale-110"
-        data-course="{{ $cour->id }}"
-        data-url="{{ route('like.cour', ['courId' => $cour->id]) }}">
+        <!-- Like -->
+        <button
+            type="button"
+            class="like-btn absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur transition hover:scale-110"
+            data-course="{{ $cour->id }}"
+            data-url="{{ route('like.cour', ['courId' => $cour->id]) }}">
 
-        <svg
-    class="heart h-6 w-6 transition {{ $cour->likedByUser() ? 'text-red-500' : 'text-gray-500' }}"
-    fill="currentColor"
-    viewBox="0 0 20 20">
+            <svg
+                class="heart h-6 w-6 transition {{ $cour->likedByUser() ? 'text-red-500' : 'text-gray-500' }}"
+                fill="currentColor"
+                viewBox="0 0 20 20">
 
-    <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
 
-</svg>
+            </svg>
 
-    </button>
+        </button>
 
-    <!-- Price -->
-    <div class="absolute bottom-4 right-4 rounded-full bg-white px-4 py-2 text-lg font-bold text-indigo-700 shadow">
-        {{ number_format($cour->price, thousands_separator: ' ') }} FCFA
+        <!-- Price -->
+        <div class="absolute bottom-4 right-4 rounded-full bg-white px-4 py-2 text-lg font-bold text-indigo-700 shadow">
+            {{ number_format($cour->price, thousands_separator: ' ') }} FCFA
+        </div>
+
     </div>
-
-</div>
 
     <!-- Content -->
 
@@ -91,23 +91,23 @@
         </div>
         <div class="mt-4 flex items-center justify-between text-sm text-gray-500">
 
-    <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2">
 
-        <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
-        </svg>
+                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                </svg>
 
-        <span class="likes-count" id="likes-count">
+                <span class="likes-count" id="likes-count">
 
-            {{ $cour->likes()->count() }}
+                    {{ $cour->likes()->count() }}
 
-        </span>
+                </span>
 
-    </div>
+            </div>
 
-    <span>{{ $cour->updated_at->diffForHumans() }}</span>
+            <span>{{ $cour->updated_at->diffForHumans() }}</span>
 
-</div>
+        </div>
 
         <!-- Footer -->
 
@@ -135,6 +135,7 @@
                 </button>
 
             </div>
+        
         </div>
 
     </div>

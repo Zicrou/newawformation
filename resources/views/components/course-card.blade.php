@@ -37,7 +37,7 @@
 
         <!-- Price -->
         <div class="absolute bottom-4 right-4 rounded-full bg-white px-4 py-2 text-lg font-bold text-indigo-700 shadow">
-            {{ number_format($cour->price, thousands_separator: ' ') }} FCFA
+            {{ number_format($cour->price, '2', thousands_separator: ' ') }} FCFA
         </div>
 
     </div>

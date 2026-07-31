@@ -47,7 +47,7 @@
 
                 <input
                     type="text"
-                    name="search"
+                    name="title"
                     placeholder="Rechercher une formation..."
                     class="flex-1 rounded-xl border-0 bg-white px-6 py-4 text-gray-800 focus:ring-2 focus:ring-yellow-400">
 

@@ -19,32 +19,28 @@
 
                 @foreach($coursAcheter as $enrollment)
 
-                    @php
-                        $cours = $enrollment->cours;
-                    @endphp
-
-                    @if($cours)
+                    @if($enrollment->cours)
 
                         <div class="min-w-[280px] shrink-0 rounded-xl bg-white dark:bg-gray-700 shadow">
 
                             <img
-                                src="{{ asset($cours->thumbnail) }}"
+                                src="{{ asset($enrollment->cours->thumbnail) }}"
                                 class="h-40 w-full object-cover rounded-t-xl">
 
                             <div class="p-4">
 
                                 <h4 class="font-bold text-lg">
-                                    {{ $cours->title }}
+                                    {{ $enrollment->cours->title }}
                                 </h4>
 
                                 <p class="mt-2 text-sm text-gray-500">
-                                    {{ number_format($cours->price, 2, ',', ' ') }} €
+                                    {{ number_format($enrollment->cours->price, 2, ',', ' ') }} €
                                 </p>
 
                                 <a
                                     href="{{ route('cour.show', [
-                                            'slug' => $cours->getSlug(),
-                                            'cour' => $cours
+                                            'slug' => $enrollment->cours->getSlug(),
+                                            'cour' => $enrollment->cours
                                         ]) }}"
                                     class="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">
 
@@ -79,29 +75,29 @@
             <div class="flex gap-5 overflow-x-auto pb-4">
 
                 @foreach($likes as $like)
-
+                
                     @if($like)
 
                         <div class="min-w-[280px] shrink-0 rounded-xl bg-white dark:bg-gray-700 shadow">
 
                             <img
-                                src="{{ asset($like->   cours->thumbnail) }}"
+                                src="{{ asset($like->cours->thumbnail) }}"
                                 class="h-40 w-full object-cover rounded-t-xl">
 
                             <div class="p-4">
 
                                 <h4 class="font-bold text-lg">
-                                    {{ $like->  cours->title }}
+                                    {{ $like->cours->title }}
                                 </h4>
 
                                 <p class="mt-2 text-sm text-gray-500">
-                                    {{ number_format($like->    cours->price, 2, ',', ' ') }} €
+                                    {{ number_format($like->cours->price, 2, ',', ' ') }} €
                                 </p>
 
                                 <a
                                     href="{{ route('cour.show', [
-                                            'slug' => $like->   cours->getSlug(),
-                                            'cour' => $cours
+                                            'slug' => $like->cours->getSlug(),
+                                            'cour' => $like->cours
                                         ]) }}"
                                     class="mt-4 inline-block rounded-lg bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700">
 

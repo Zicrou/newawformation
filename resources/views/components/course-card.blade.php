@@ -6,7 +6,7 @@
     <div class="relative overflow-hidden">
 
         <img
-            src="{{ asset('storage/' .$cour->thumbnail) }}"
+            src="{{ asset($cour->thumbnail) }}"
             alt="{{ $cour->title }}"
             class="h-56 w-full object-cover transition duration-500 group-hover:scale-110">
 

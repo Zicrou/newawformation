@@ -47,6 +47,7 @@ class CourController extends Controller
 
     public function show(string $slug, Cours $cour)
     {
+        $acheter = false;
         if(Auth::check()){
             
             $enrollment = Enrollment::where('cours_id', $cour->id)->where('user_id', auth()->id())->first();

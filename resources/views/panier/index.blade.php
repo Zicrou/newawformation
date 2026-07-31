@@ -78,7 +78,7 @@
                             <div class="flex items-center gap-4">
 
                                 <img
-                                    src="{{ asset('storage/' .$item->cours->thumbnail) }}"
+                                    src="{{ asset($item->cours->thumbnail) }}"
                                     class="h-20 w-32 rounded-xl object-cover"
                                 >
 

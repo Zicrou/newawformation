@@ -24,7 +24,7 @@
                         <div class="min-w-[280px] shrink-0 rounded-xl bg-white dark:bg-gray-700 shadow">
 
                             <img
-                                src="{{ asset($enrollment->cours->thumbnail) }}"
+                                src="{{ asset('storage/' .$enrollment->cours->thumbnail) }}"
                                 class="h-40 w-full object-cover rounded-t-xl">
 
                             <div class="p-4">
@@ -81,7 +81,7 @@
                         <div class="min-w-[280px] shrink-0 rounded-xl bg-white dark:bg-gray-700 shadow">
 
                             <img
-                                src="{{ asset($like->cours->thumbnail) }}"
+                                src="{{ asset('storage/' .$like->cours->thumbnail) }}"
                                 class="h-40 w-full object-cover rounded-t-xl">
 
                             <div class="p-4">

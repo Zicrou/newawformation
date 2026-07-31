@@ -37,11 +37,17 @@
 
             <div class="overflow-hidden rounded-2xl bg-white shadow">
 
-                <video
-                    controls
-                    class="aspect-video w-full">
-                    <source src="{{ asset($cour->video) }}">
-                </video>
+                @if($acheter)
+
+                    <video controls class="aspect-video w-full">
+                        <source src="{{ asset($cour->video) }}">
+                    </video>
+
+                @else
+
+                    <img src="{{ asset($cour->thumbnail) }}" alt="{{ $cour->title }}" class="w-full object-cover transition duration-500 group-hover:scale-110">
+
+                @endif
 
                 <div class="p-8">
 
